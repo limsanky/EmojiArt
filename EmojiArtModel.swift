@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct EmojiArtModel {
+struct EmojiArtModel: Codable {
     var background = Background.blank
     var emojis = [Emoji]()
     
-    struct Emoji: Identifiable, Hashable {
+    struct Emoji: Identifiable, Hashable, Codable {
         let text: String // the emoji itself, which can't be changed
         
         // X and Y coordinates
@@ -35,6 +35,19 @@ struct EmojiArtModel {
     
     // Empty Init, the free init provided is replaced so that no one can create a model with custom emojis
     init() { }
+    
+    init(json: Data) throws {
+        self = try JSONDecoder().decode(EmojiArtModel.self, from: json)
+    }
+    
+    init(url: URL) throws {
+        let data = try Data(contentsOf: url)
+        self = try EmojiArtModel(json: data)
+    }
+    
+    func json() throws -> Data {
+        try JSONEncoder().encode(self)
+    }
     
     private var uniqueEmojiId = 0
     
