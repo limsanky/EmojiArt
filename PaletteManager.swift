@@ -33,6 +33,7 @@ struct PaletteManager: View {
             }
             .navigationTitle("Manage Palettes")
             .navigationBarTitleDisplayMode(.inline)
+            .dismissable { presentationMode.wrappedValue.dismiss() }
             .toolbar {
                 EditButton()
             }
